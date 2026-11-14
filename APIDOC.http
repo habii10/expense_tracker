@@ -1,0 +1,31 @@
+#Contains HTTP requests used to test API endpoints directly in VS Code.#
+
+#api call for signup
+###
+POST http://127.0.0.1:8000/account/register/
+Content-Type: application/json
+
+{
+    "username":"django",
+    "password":"django@123",
+    "email":"django@gmail.com",
+    "phone":123456,
+    "dob":"2005-03-02"
+}
+
+#api call for listing expenses
+###
+GET  http://127.0.0.1:8000/expenses/
+Accept: application/json
+Authorization: Basic django:django@123
+
+#api call for creating expense
+###
+POST http://127.0.0.1:8000/expenses/
+Content-Type: application/json
+Authorization: Basic django:django@123
+
+{
+    "title":"travel",
+    "category"
+}
