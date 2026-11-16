@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+
 from rest_framework.views import APIView
 from rest_framework import authentication,permissions
 from rest_framework.response import Response
@@ -37,3 +38,39 @@ class ExpenseListCreateView(APIView):
             return Response(serializer_instance.data)
         else:
              return Response (serializer_instance.errors)
+        
+from transactions.permissions import IsOwner
+class ExpenseRetrieveUpdateDeleteView(APIView):
+     authentication_classes=[authentication.BasicAuthentication]
+     permission_classes=[IsOwner]
+
+     def get(self,request,pk=None):
+        #qs=Expense.objects.get(id=pk)
+        qs=get_object_or_404(Expense,id=pk)
+
+        self.check_object_permissions(request,qs)
+
+        serialized_instance=ExpenseSerializers(qs)
+        return Response(serialized_instance.data)        
+
+     def put(self,request,pk=None):
+         instance=get_object_or_404(Expense,id=pk)
+         self.check_object_permissions(request,instance)
+
+         form_data=request.data
+         serialized_instance=ExpenseSerializers(data=form_data,instance=instance)
+
+         if serialized_instance.is_valid():
+             serialized_instance.save()
+             return Response(data=serialized_instance.data)
+
+         else:
+             return Response(data=serialized_instance.errors)
+
+     def delete(self,request,pk=None):
+         qs=get_object_or_404(Expense,id=pk)
+         self.check_object_permissions(request,qs)
+         qs.delete()
+         return Response({"message":"deleted..."})    
+
+     

@@ -26,6 +26,37 @@ Content-Type: application/json
 Authorization: Basic django:django@123
 
 {
-    "title":"travel",
-    "category"
+    "title":"lunch",
+    "category":"food",
+    "amount":150
 }
+
+#api cal for fetching expense
+###
+GET  http://127.0.0.1:8000/expenses/2/
+Accept: application/json
+Authorization: Basic django:django@123
+
+#api cal for fetching expense
+###
+PUT   http://127.0.0.1:8000/expenses/2/
+Content-Type: application/json
+Authorization: Basic django:django@123
+
+{
+  "id": 2,
+  "title": "dinner",
+  "category": "food",
+  "amount": "350.00",
+  "description": null,
+  "bill_image": null,
+  "payment_method": "upi",
+  "created_at": "2026-11-16T04:14:39.868282Z",
+  "owner": 1
+}
+
+#api call for deleting data
+###
+DELETE http://127.0.0.1:8000/expenses/1/
+Accept: application/json
+Authorization: Basic django:django@123
