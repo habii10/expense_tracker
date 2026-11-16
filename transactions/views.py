@@ -73,4 +73,37 @@ class ExpenseRetrieveUpdateDeleteView(APIView):
          qs.delete()
          return Response({"message":"deleted..."})    
 
+from datetime import datetime
+from django.db.models import Sum
+
+class ExpenseSummaryView(APIView):
+
+
+    authentication_classes =[authentication.BasicAuthentication]
+
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self,request):
+
+        auth_user_expenses = Expense.objects.filter(owner=request.user)
+
+        response_data={
+            "todays_total":0,
+            "monthly_total":0
+        }
+
+        cur_date = datetime.today().date()
+
+        todays_total=auth_user_expenses.filter(
+                                                created_at__date = cur_date
+                                                ).values("amount").aggregate(total=Sum("amount")).get("total")
+
+        #todays_total=3200
+
+        response_data["todays_total"]= todays_total
+
+
+
+
+        return Response(response_data)
      
