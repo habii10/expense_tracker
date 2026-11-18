@@ -9,7 +9,8 @@ from transactions.serializers import ExpenseSerializers
 # Create your views here.
 class ExpenseListCreateView(APIView):
 
-    authentication_classes=[authentication.BasicAuthentication]
+    #authentication_classes=[authentication.BasicAuthentication]
+    authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[permissions.IsAuthenticated]
 
 
@@ -41,7 +42,8 @@ class ExpenseListCreateView(APIView):
         
 from transactions.permissions import IsOwner
 class ExpenseRetrieveUpdateDeleteView(APIView):
-     authentication_classes=[authentication.BasicAuthentication]
+     #authentication_classes=[authentication.BasicAuthentication]
+     authentication_classes=[authentication.TokenAuthentication]
      permission_classes=[IsOwner]
 
      def get(self,request,pk=None):
@@ -79,7 +81,8 @@ from django.db.models import Sum
 class ExpenseSummaryView(APIView):
 
 
-    authentication_classes =[authentication.BasicAuthentication]
+    #authentication_classes =[authentication.BasicAuthentication]
+    authentication_classes=[authentication.TokenAuthentication]
 
     permission_classes=[permissions.IsAuthenticated]
 
@@ -91,6 +94,7 @@ class ExpenseSummaryView(APIView):
             "todays_total":0,
             "monthly_total":0
         }
+         #todays_total
 
         cur_date = datetime.today().date()
 
@@ -98,12 +102,20 @@ class ExpenseSummaryView(APIView):
                                                 created_at__date = cur_date
                                                 ).values("amount").aggregate(total=Sum("amount")).get("total")
 
-        #todays_total=3200
+       
 
         response_data["todays_total"]= todays_total
 
+        #monthly_total
 
+        cur_month=datetime.today().month
+        cur_year=datetime.today().year
 
+        monthly_total=auth_user_expenses.filter(
+            created_at__month=cur_month,created_at__year=cur_year).values("amount").aggregate(total=Sum("amount")).get("total")
+
+        response_data["monthly_total"]=monthly_total
+             
 
         return Response(response_data)
      

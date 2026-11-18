@@ -13,35 +13,45 @@ Content-Type: application/json
     "dob":"2005-03-02"
 }
 
+#=========TOKEN==========
+###
+POST http://127.0.0.1:8000/token/
+Content-Type: application/json
+
+{
+    "username":"django",
+    "password":"django@123"
+}
+
 #api call for listing expenses
 ###
 GET  http://127.0.0.1:8000/expenses/
 Accept: application/json
-Authorization: Basic django:django@123
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
 
 #api call for creating expense
 ###
 POST http://127.0.0.1:8000/expenses/
 Content-Type: application/json
-Authorization: Basic django:django@123
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
 
 {
-    "title":"lunch",
-    "category":"food",
-    "amount":150
+    "title":"fuel",
+    "category":"travel",
+    "amount":500
 }
 
 #api cal for fetching expense
 ###
 GET  http://127.0.0.1:8000/expenses/2/
 Accept: application/json
-Authorization: Basic django:django@123
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
 
 #api cal for fetching expense
 ###
 PUT   http://127.0.0.1:8000/expenses/2/
 Content-Type: application/json
-Authorization: Basic django:django@123
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
 
 {
   "id": 2,
@@ -59,4 +69,10 @@ Authorization: Basic django:django@123
 ###
 DELETE http://127.0.0.1:8000/expenses/1/
 Accept: application/json
-Authorization: Basic django:django@123
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
+
+#api call summary
+###
+GET http://127.0.0.1:8000/expenses/summery/
+Accept: application/json
+Authorization:Token bf4d9de2d2ce9f90e141db8ad7ddc71653633d16
